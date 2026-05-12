@@ -39,7 +39,7 @@ document.querySelector('#app').innerHTML = `
     <section class="document-login" aria-label="Student login">
       <form class="exam-document">
         <p class="document-code">Form BR-01</p>
-        <h2>Student Entry Document</h2>
+        <h2>Black Room Entry Document</h2>
         <p class="document-warning">Print clearly. The room will remember your name.</p>
 
         <label>

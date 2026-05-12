@@ -235,6 +235,33 @@ input {
   z-index: 6;
 }
 
+.back-button {
+  position: absolute;
+  top: 24px;
+  left: 24px;
+  z-index: 8;
+  min-height: 42px;
+  border: 1px solid rgba(255, 255, 255, 0.72);
+  padding: 0 16px;
+  color: #f1f1f1;
+  background: rgba(4, 4, 6, 0.72);
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  cursor: pointer;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateX(-12px);
+  transition:
+    opacity 240ms ease,
+    transform 240ms ease,
+    visibility 240ms ease;
+}
+
+.back-button:hover {
+  background: rgba(255, 255, 255, 0.14);
+}
+
 .title-panel {
   width: min(680px, calc(100% - 36px));
   min-height: 100vh;
@@ -443,6 +470,12 @@ h2 {
   opacity: 1;
   visibility: visible;
   transform: scale(1);
+}
+
+.black-room.is-login .back-button {
+  opacity: 1;
+  visibility: visible;
+  transform: translateX(0);
 }
 
 @media (max-width: 760px) {

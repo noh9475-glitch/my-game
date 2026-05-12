@@ -2,6 +2,8 @@ import './style.css'
 
 document.querySelector('#app').innerHTML = `
   <main class="black-room" aria-labelledby="game-title">
+    <button id="back-button" class="back-button" type="button" aria-label="Back to start">Back</button>
+
     <section class="room-stage" aria-hidden="true">
       <div class="projector">
         <div class="screen-glow"></div>
@@ -66,6 +68,7 @@ document.querySelector('#app').innerHTML = `
 `
 
 const startButton = document.querySelector('#start-button')
+const backButton = document.querySelector('#back-button')
 const screen = document.querySelector('.black-room')
 
 startButton.addEventListener('click', () => {
@@ -74,4 +77,12 @@ startButton.addEventListener('click', () => {
   window.setTimeout(() => {
     screen.classList.add('is-login')
   }, 900)
+})
+
+backButton.addEventListener('click', () => {
+  screen.classList.remove('is-login')
+
+  window.setTimeout(() => {
+    screen.classList.remove('is-zooming')
+  }, 120)
 })

@@ -1,60 +1,110 @@
 import './style.css'
-import javascriptLogo from './assets/javascript.svg'
-import viteLogo from './assets/vite.svg'
-import heroImg from './assets/hero.png'
-import { setupCounter } from './counter.js'
+import { getTopScores, hasSupabaseConfig, submitScore } from './leaderboard.js'
 
 document.querySelector('#app').innerHTML = `
-<section id="center">
-  <div class="hero">
-    <img src="${heroImg}" class="base" width="170" height="179">
-    <img src="${javascriptLogo}" class="framework" alt="JavaScript logo"/>
-    <img src="${viteLogo}" class="vite" alt="Vite logo" />
-  </div>
-  <div>
-    <h1>Get started</h1>
-    <p>Edit <code>src/main.js</code> and save to test <code>HMR</code></p>
-  </div>
-  <button id="counter" type="button" class="counter"></button>
+<section class="shell">
+  <header class="intro">
+    <p class="eyebrow">Supabase test</p>
+    <h1>Game leaderboard</h1>
+    <p>Submit a test score, then load the shared top scores from your Supabase table.</p>
+  </header>
+
+  <section class="panel">
+    <form id="score-form" class="score-form">
+      <label>
+        Player name
+        <input id="player-name" name="playerName" type="text" maxlength="24" placeholder="Alex" required>
+      </label>
+
+      <label>
+        Score
+        <input id="score" name="score" type="number" min="0" step="1" placeholder="100" required>
+      </label>
+
+      <button type="submit">Submit score</button>
+    </form>
+
+    <p id="status" class="status" role="status"></p>
+  </section>
+
+  <section class="panel">
+    <div class="leaderboard-header">
+      <h2>Top scores</h2>
+      <button id="refresh-scores" type="button">Refresh</button>
+    </div>
+
+    <ol id="leaderboard" class="leaderboard"></ol>
+  </section>
 </section>
-
-<div class="ticks"></div>
-
-<section id="next-steps">
-  <div id="docs">
-    <svg class="icon" role="presentation" aria-hidden="true"><use href="/icons.svg#documentation-icon"></use></svg>
-    <h2>Documentation</h2>
-    <p>Your questions, answered</p>
-    <ul>
-      <li>
-        <a href="https://vite.dev/" target="_blank">
-          <img class="logo" src="${viteLogo}" alt="" />
-          Explore Vite
-        </a>
-      </li>
-      <li>
-        <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript" target="_blank">
-          <img class="button-icon" src="${javascriptLogo}" alt="">
-          Learn more
-        </a>
-      </li>
-    </ul>
-  </div>
-  <div id="social">
-    <svg class="icon" role="presentation" aria-hidden="true"><use href="/icons.svg#social-icon"></use></svg>
-    <h2>Connect with us</h2>
-    <p>Join the Vite community</p>
-    <ul>
-      <li><a href="https://github.com/vitejs/vite" target="_blank"><svg class="button-icon" role="presentation" aria-hidden="true"><use href="/icons.svg#github-icon"></use></svg>GitHub</a></li>
-      <li><a href="https://chat.vite.dev/" target="_blank"><svg class="button-icon" role="presentation" aria-hidden="true"><use href="/icons.svg#discord-icon"></use></svg>Discord</a></li>
-      <li><a href="https://x.com/vite_js" target="_blank"><svg class="button-icon" role="presentation" aria-hidden="true"><use href="/icons.svg#x-icon"></use></svg>X.com</a></li>
-      <li><a href="https://bsky.app/profile/vite.dev" target="_blank"><svg class="button-icon" role="presentation" aria-hidden="true"><use href="/icons.svg#bluesky-icon"></use></svg>Bluesky</a></li>
-    </ul>
-  </div>
-</section>
-
-<div class="ticks"></div>
-<section id="spacer"></section>
 `
 
-setupCounter(document.querySelector('#counter'))
+const scoreForm = document.querySelector('#score-form')
+const statusEl = document.querySelector('#status')
+const leaderboardEl = document.querySelector('#leaderboard')
+const refreshButton = document.querySelector('#refresh-scores')
+
+function setStatus(message, type = '') {
+  statusEl.textContent = message
+  statusEl.dataset.type = type
+}
+
+function renderScores(scores) {
+  if (!scores.length) {
+    leaderboardEl.innerHTML = '<li class="empty">No scores yet.</li>'
+    return
+  }
+
+  leaderboardEl.innerHTML = scores
+    .map(
+      (score) => `
+        <li>
+          <span>${score.player_name}</span>
+          <strong>${score.score}</strong>
+        </li>
+      `,
+    )
+    .join('')
+}
+
+async function loadScores() {
+  if (!hasSupabaseConfig) {
+    setStatus('Add your Supabase URL and anon key to my-game/.env, then restart npm run dev.', 'warning')
+    renderScores([])
+    return
+  }
+
+  setStatus('Loading scores...')
+
+  try {
+    const scores = await getTopScores()
+    renderScores(scores)
+    setStatus('Leaderboard loaded.', 'success')
+  } catch (error) {
+    setStatus(error.message, 'error')
+  }
+}
+
+scoreForm.addEventListener('submit', async (event) => {
+  event.preventDefault()
+
+  const formData = new FormData(scoreForm)
+  const playerName = formData.get('playerName').trim()
+  const score = Number(formData.get('score'))
+
+  if (!playerName || Number.isNaN(score)) return
+
+  setStatus('Submitting score...')
+
+  try {
+    await submitScore(playerName, score)
+    scoreForm.reset()
+    setStatus('Score submitted.', 'success')
+    await loadScores()
+  } catch (error) {
+    setStatus(error.message, 'error')
+  }
+})
+
+refreshButton.addEventListener('click', loadScores)
+
+loadScores()

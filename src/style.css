@@ -296,7 +296,7 @@ input {
 
 .title-panel {
   position: absolute;
-  top: 690px;
+  top: 730px;
   left: 50%;
   width: 680px;
   display: grid;
@@ -307,29 +307,6 @@ input {
     opacity 420ms ease,
     transform 650ms ease,
     visibility 420ms ease;
-}
-
-.tagline {
-  color: #a8a8ad;
-}
-
-h1 {
-  max-width: 10ch;
-  margin: 0;
-  color: #ffffff;
-  font-size: 6.2rem;
-  line-height: 0.84;
-  text-transform: uppercase;
-  text-shadow:
-    2px 0 #7a7a7d,
-    -2px 0 #202023,
-    0 0 22px rgba(255, 255, 255, 0.26);
-}
-
-.tagline {
-  max-width: 520px;
-  margin: 18px 0 24px;
-  line-height: 1.5;
 }
 
 .start-button,

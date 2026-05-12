@@ -1,7 +1,7 @@
 import './style.css'
 
 document.querySelector('#app').innerHTML = `
-  <main class="black-room" aria-labelledby="game-title">
+  <main class="black-room" aria-label="The Black Room">
     <button id="back-button" class="back-button" type="button" aria-label="Back to start">Back</button>
 
     <div class="scene-shell">
@@ -31,8 +31,6 @@ document.querySelector('#app').innerHTML = `
       </section>
 
       <section class="title-panel" aria-label="Start screen">
-        <h1 id="game-title">The Black Room</h1>
-        <p class="tagline">One desk is waiting. Your exam has already begun.</p>
         <button id="start-button" class="start-button" type="button">Start</button>
       </section>
     </div>

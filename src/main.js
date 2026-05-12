@@ -21,10 +21,7 @@ document.querySelector('#app').innerHTML = `
           (_, index) => `
             <div class="desk ${index === 10 ? 'focus-desk' : ''}">
               ${index === 10 ? `
-                <div class="open-book">
-                  <div class="book-page left-page"></div>
-                  <div class="book-page right-page"></div>
-                </div>
+                <div class="desk-paper"></div>
               ` : ''}
             </div>
           `,
@@ -34,31 +31,23 @@ document.querySelector('#app').innerHTML = `
 
     <section class="title-panel" aria-label="Start screen">
       <h1 id="game-title">The Black Room</h1>
-      <p class="tagline">One desk is waiting. The book is already open.</p>
+      <p class="tagline">One desk is waiting. Your exam has already begun.</p>
       <button id="start-button" class="start-button" type="button">Start</button>
     </section>
 
-    <section class="book-login" aria-label="Student login">
-      <div class="login-book">
-        <div class="book-spine"></div>
+    <section class="document-login" aria-label="Student login">
+      <form class="exam-document">
+        <p class="document-code">Form BR-01</p>
+        <h2>Student Entry Document</h2>
+        <p class="document-warning">Print clearly. The room will remember your name.</p>
 
-        <div class="book-sheet book-left">
-          <p class="book-label">The Black Room</p>
-          <h2>Student Record</h2>
-          <p class="scribble line-one"></p>
-          <p class="scribble line-two"></p>
-          <p class="scribble line-three"></p>
-        </div>
+        <label>
+          Student name
+          <input type="text" name="student-name" autocomplete="username" placeholder="Reuben">
+        </label>
 
-        <form class="book-sheet book-right">
-          <label>
-            Student name
-            <input type="text" name="student-name" autocomplete="username" placeholder="Reuben">
-          </label>
-
-          <button type="button">Enter</button>
-        </form>
-      </div>
+        <button type="button">Enter</button>
+      </form>
     </section>
   </main>
 `

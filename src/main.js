@@ -1,110 +1,84 @@
+import Phaser from 'phaser'
 import './style.css'
-import { getTopScores, hasSupabaseConfig, submitScore } from './leaderboard.js'
 
-document.querySelector('#app').innerHTML = `
-<section class="shell">
-  <header class="intro">
-    <p class="eyebrow">Supabase test</p>
-    <h1>Game leaderboard</h1>
-    <p>Submit a test score, then load the shared top scores from your Supabase table.</p>
-  </header>
-
-  <section class="panel">
-    <form id="score-form" class="score-form">
-      <label>
-        Player name
-        <input id="player-name" name="playerName" type="text" maxlength="24" placeholder="Alex" required>
-      </label>
-
-      <label>
-        Score
-        <input id="score" name="score" type="number" min="0" step="1" placeholder="100" required>
-      </label>
-
-      <button type="submit">Submit score</button>
-    </form>
-
-    <p id="status" class="status" role="status"></p>
-  </section>
-
-  <section class="panel">
-    <div class="leaderboard-header">
-      <h2>Top scores</h2>
-      <button id="refresh-scores" type="button">Refresh</button>
-    </div>
-
-    <ol id="leaderboard" class="leaderboard"></ol>
-  </section>
-</section>
-`
-
-const scoreForm = document.querySelector('#score-form')
-const statusEl = document.querySelector('#status')
-const leaderboardEl = document.querySelector('#leaderboard')
-const refreshButton = document.querySelector('#refresh-scores')
-
-function setStatus(message, type = '') {
-  statusEl.textContent = message
-  statusEl.dataset.type = type
-}
-
-function renderScores(scores) {
-  if (!scores.length) {
-    leaderboardEl.innerHTML = '<li class="empty">No scores yet.</li>'
-    return
+class BlackRoomScene extends Phaser.Scene {
+  constructor() {
+    super('BlackRoomScene')
   }
 
-  leaderboardEl.innerHTML = scores
-    .map(
-      (score) => `
-        <li>
-          <span>${score.player_name}</span>
-          <strong>${score.score}</strong>
-        </li>
-      `,
+  create() {
+    const { width, height } = this.scale
+
+    this.cameras.main.setBackgroundColor('#050507')
+
+    this.add.text(width / 2, 54, 'The Black Room', {
+      color: '#f3f3f7',
+      fontFamily: 'Arial, sans-serif',
+      fontSize: '34px',
+      fontStyle: 'bold',
+    }).setOrigin(0.5)
+
+    this.add.text(width / 2, 92, 'Move with WASD or arrow keys', {
+      color: '#858899',
+      fontFamily: 'Arial, sans-serif',
+      fontSize: '16px',
+    }).setOrigin(0.5)
+
+    this.room = this.add.rectangle(width / 2, height / 2 + 24, 640, 360, 0x08090d)
+    this.room.setStrokeStyle(2, 0x232532)
+
+    this.player = this.add.rectangle(width / 2, height / 2 + 24, 34, 34, 0xffffff)
+    this.physics.add.existing(this.player)
+    this.player.body.setCollideWorldBounds(true)
+
+    this.physics.world.setBounds(
+      this.room.x - this.room.width / 2 + 17,
+      this.room.y - this.room.height / 2 + 17,
+      this.room.width - 34,
+      this.room.height - 34,
     )
-    .join('')
+
+    this.cursors = this.input.keyboard.createCursorKeys()
+    this.wasd = this.input.keyboard.addKeys('W,A,S,D')
+  }
+
+  update() {
+    const speed = 230
+    const body = this.player.body
+
+    body.setVelocity(0)
+
+    if (this.cursors.left.isDown || this.wasd.A.isDown) {
+      body.setVelocityX(-speed)
+    } else if (this.cursors.right.isDown || this.wasd.D.isDown) {
+      body.setVelocityX(speed)
+    }
+
+    if (this.cursors.up.isDown || this.wasd.W.isDown) {
+      body.setVelocityY(-speed)
+    } else if (this.cursors.down.isDown || this.wasd.S.isDown) {
+      body.setVelocityY(speed)
+    }
+
+    body.velocity.normalize().scale(speed)
+  }
 }
 
-async function loadScores() {
-  if (!hasSupabaseConfig) {
-    setStatus('Add your Supabase URL and anon key to my-game/.env, then restart npm run dev.', 'warning')
-    renderScores([])
-    return
-  }
-
-  setStatus('Loading scores...')
-
-  try {
-    const scores = await getTopScores()
-    renderScores(scores)
-    setStatus('Leaderboard loaded.', 'success')
-  } catch (error) {
-    setStatus(error.message, 'error')
-  }
-}
-
-scoreForm.addEventListener('submit', async (event) => {
-  event.preventDefault()
-
-  const formData = new FormData(scoreForm)
-  const playerName = formData.get('playerName').trim()
-  const score = Number(formData.get('score'))
-
-  if (!playerName || Number.isNaN(score)) return
-
-  setStatus('Submitting score...')
-
-  try {
-    await submitScore(playerName, score)
-    scoreForm.reset()
-    setStatus('Score submitted.', 'success')
-    await loadScores()
-  } catch (error) {
-    setStatus(error.message, 'error')
-  }
+new Phaser.Game({
+  type: Phaser.AUTO,
+  parent: 'app',
+  width: 960,
+  height: 600,
+  backgroundColor: '#050507',
+  physics: {
+    default: 'arcade',
+    arcade: {
+      debug: false,
+    },
+  },
+  scale: {
+    mode: Phaser.Scale.FIT,
+    autoCenter: Phaser.Scale.CENTER_BOTH,
+  },
+  scene: BlackRoomScene,
 })
-
-refreshButton.addEventListener('click', loadScores)
-
-loadScores()

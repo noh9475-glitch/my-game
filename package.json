@@ -1,14 +1,17 @@
 {
+  "name": "the-black-room",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
   "scripts": {
     "dev": "vite",
     "build": "vite build",
     "preview": "vite preview"
   },
   "dependencies": {
-    "@supabase/supabase-js": "^2.105.4",
     "phaser": "^4.1.0"
   },
   "devDependencies": {
-    "vite": "^7.0.0"
+    "vite": "^7.3.3"
   }
 }

@@ -32,7 +32,7 @@ document.querySelector('#app').innerHTML = `
 
       <section class="title-panel" aria-label="Start screen">
         <p class="tagline">One desk awaits. Your exam has already begun.</p>
-        <button id="start-button" class="start-button" type="button">Start</button>
+        <button id="start-button" class="start-button" type="button">Begin</button>
       </section>
     </div>
 

@@ -54,7 +54,7 @@ input {
   position: absolute;
   inset: 0;
   opacity: 0.82;
-  transform-origin: 50% 49%;
+  transform-origin: 50% 52%;
   transition:
     transform 1250ms cubic-bezier(0.16, 1, 0.3, 1),
     opacity 700ms ease;
@@ -73,10 +73,10 @@ input {
 
 .projector {
   position: absolute;
-  top: 34px;
+  top: 70px;
   left: 50%;
-  width: min(430px, 72vw);
-  height: 160px;
+  width: min(660px, 82vw);
+  height: 230px;
   transform: translateX(-50%);
 }
 
@@ -99,26 +99,52 @@ input {
 .screen-bar {
   top: 0;
   width: 82%;
-  height: 15px;
+  height: 17px;
   background: linear-gradient(#5b5b5d, #18191b);
   border: 3px solid #303033;
 }
 
 .screen {
-  top: 18px;
+  top: 22px;
   width: 76%;
-  height: 104px;
+  height: 150px;
+  display: grid;
+  place-items: center;
+  align-content: center;
   background:
     linear-gradient(135deg, rgba(255, 255, 255, 0.7), transparent 38%),
     linear-gradient(#efefef, #b6b6b6);
   border: 6px solid #0a0a0b;
   box-shadow: 0 0 0 3px #6d6d70;
+  text-align: center;
+}
+
+.screen p,
+.screen strong {
+  position: relative;
+  z-index: 1;
+  margin: 0;
+  color: rgba(15, 15, 17, 0.72);
+  text-transform: uppercase;
+}
+
+.screen p {
+  font-size: clamp(0.78rem, 1.4vw, 1.05rem);
+  font-weight: 800;
+  letter-spacing: 0.16em;
+}
+
+.screen strong {
+  max-width: 15ch;
+  font-size: clamp(1.5rem, 4vw, 3.2rem);
+  line-height: 0.92;
+  text-shadow: 1px 1px rgba(255, 255, 255, 0.34);
 }
 
 .screen-pull {
-  top: 132px;
+  top: 188px;
   width: 12px;
-  height: 28px;
+  height: 34px;
   border-left: 4px solid #4d4d50;
 }
 
@@ -136,7 +162,7 @@ input {
 .desks {
   position: absolute;
   left: 50%;
-  top: 235px;
+  top: 330px;
   width: min(1000px, 92vw);
   display: grid;
   grid-template-columns: repeat(3, minmax(150px, 1fr));
@@ -263,13 +289,13 @@ input {
 }
 
 .title-panel {
+  position: absolute;
+  top: clamp(625px, 72vh, 760px);
+  left: 50%;
   width: min(680px, calc(100% - 36px));
-  min-height: 100vh;
   display: grid;
-  align-content: center;
   justify-items: center;
-  margin: 0 auto;
-  padding: 32px 0;
+  transform: translateX(-50%);
   text-align: center;
   transition:
     opacity 420ms ease,
@@ -453,13 +479,13 @@ h2 {
 }
 
 .black-room.is-zooming .room-stage {
-  transform: scale(3.25) translateY(-118px);
+  transform: scale(3.25) translateY(-168px);
 }
 
 .black-room.is-zooming .title-panel {
   opacity: 0;
   visibility: hidden;
-  transform: scale(0.9) translateY(-24px);
+  transform: translateX(-50%) scale(0.9) translateY(-24px);
 }
 
 .black-room.is-login .room-stage {
@@ -480,11 +506,12 @@ h2 {
 
 @media (max-width: 760px) {
   .projector {
-    top: 30px;
+    top: 44px;
+    width: min(520px, 88vw);
   }
 
   .desks {
-    top: 205px;
+    top: 270px;
     grid-template-columns: repeat(2, minmax(110px, 1fr));
     gap: 38px 28px;
     opacity: 0.62;
@@ -523,7 +550,15 @@ h2 {
     display: none;
   }
 
+  .title-panel {
+    top: 560px;
+  }
+
+  h1 {
+    font-size: clamp(2.7rem, 15vw, 4.8rem);
+  }
+
   .black-room.is-zooming .room-stage {
-    transform: scale(3.35) translateY(-88px);
+    transform: scale(3.35) translateY(-132px);
   }
 }

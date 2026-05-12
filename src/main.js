@@ -8,7 +8,10 @@ document.querySelector('#app').innerHTML = `
       <div class="projector">
         <div class="screen-glow"></div>
         <div class="screen-bar"></div>
-        <div class="screen"></div>
+        <div class="screen">
+          <p>Welcome to</p>
+          <strong>The Black Room</strong>
+        </div>
         <div class="screen-pull"></div>
       </div>
 

@@ -19,13 +19,12 @@ document.querySelector('#app').innerHTML = `
         ${Array.from(
           { length: 12 },
           (_, index) => `
-            <div class="desk ${index === 4 ? 'focus-desk' : ''}">
-              ${index === 4 ? `
+            <div class="desk ${index === 10 ? 'focus-desk' : ''}">
+              ${index === 10 ? `
                 <div class="open-book">
                   <div class="book-page left-page"></div>
                   <div class="book-page right-page"></div>
                 </div>
-                <div class="pen"></div>
               ` : ''}
             </div>
           `,
@@ -34,7 +33,6 @@ document.querySelector('#app').innerHTML = `
     </section>
 
     <section class="title-panel" aria-label="Start screen">
-      <p class="kicker">After lights out</p>
       <h1 id="game-title">The Black Room</h1>
       <p class="tagline">One desk is waiting. The book is already open.</p>
       <button id="start-button" class="start-button" type="button">Start</button>

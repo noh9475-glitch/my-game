@@ -390,10 +390,16 @@ input {
   position: absolute;
   top: 28px;
   right: 34px;
+  z-index: 2;
   width: 86px;
   height: 86px;
   border: 3px solid rgba(0, 0, 0, 0.55);
   opacity: 0.38;
+}
+
+.exam-document > * {
+  position: relative;
+  z-index: 1;
 }
 
 .document-code {
@@ -405,7 +411,7 @@ input {
 }
 
 h2 {
-  max-width: 12ch;
+  max-width: 8ch;
   margin: 6px 0 0;
   font-size: clamp(2.1rem, 7vw, 4.4rem);
   line-height: 0.9;

@@ -296,10 +296,11 @@ input {
 
 .title-panel {
   position: absolute;
-  top: 730px;
+  top: 705px;
   left: 50%;
   width: 680px;
   display: grid;
+  gap: 16px;
   justify-items: center;
   transform: translateX(-50%);
   text-align: center;
@@ -307,6 +308,14 @@ input {
     opacity 420ms ease,
     transform 650ms ease,
     visibility 420ms ease;
+}
+
+.tagline {
+  max-width: 520px;
+  margin: 0;
+  color: #a8a8ad;
+  font-size: 1rem;
+  line-height: 1.5;
 }
 
 .start-button,

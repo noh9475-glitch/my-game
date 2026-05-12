@@ -39,6 +39,12 @@ document.querySelector('#app').innerHTML = `
     <section class="document-login" aria-label="Student login">
       <form class="exam-document">
         <p class="document-code">Form BR-01</p>
+        <div class="stamp-mark" aria-live="polite">
+          <span>Black</span>
+          <span>Room</span>
+          <span>Entry</span>
+          <span>Confirmed</span>
+        </div>
         <h2>Black Room Entry Document</h2>
         <p class="document-warning">Print clearly. The room will remember your name.</p>
 
@@ -47,7 +53,7 @@ document.querySelector('#app').innerHTML = `
           <input type="text" name="student-name" autocomplete="username" placeholder="Student 01">
         </label>
 
-        <button type="button">Enter</button>
+        <button id="submit-form-button" type="button">Submit Form</button>
       </form>
     </section>
   </main>
@@ -55,8 +61,10 @@ document.querySelector('#app').innerHTML = `
 
 const startButton = document.querySelector('#start-button')
 const backButton = document.querySelector('#back-button')
+const submitFormButton = document.querySelector('#submit-form-button')
 const screen = document.querySelector('.black-room')
 const sceneShell = document.querySelector('.scene-shell')
+const stampMark = document.querySelector('.stamp-mark')
 
 const fitScene = () => {
   const scale = Math.min(window.innerWidth / 1000, window.innerHeight / 900)
@@ -80,4 +88,10 @@ backButton.addEventListener('click', () => {
   window.setTimeout(() => {
     screen.classList.remove('is-zooming')
   }, 120)
+})
+
+submitFormButton.addEventListener('click', () => {
+  stampMark.classList.remove('is-stamped')
+  void stampMark.offsetWidth
+  stampMark.classList.add('is-stamped')
 })

@@ -54,7 +54,7 @@ input {
   position: absolute;
   inset: 0;
   opacity: 0.82;
-  transform-origin: 50% 52%;
+  transform-origin: 50% 49%;
   transition:
     transform 1250ms cubic-bezier(0.16, 1, 0.3, 1),
     opacity 700ms ease;
@@ -384,7 +384,7 @@ h1 {
 .book-right {
   display: grid;
   align-content: center;
-  gap: 20px;
+  gap: 28px;
   border-left: 0;
   transform: perspective(900px) rotateY(-5deg);
   transform-origin: left center;
@@ -453,7 +453,7 @@ h2 {
 }
 
 .black-room.is-zooming .room-stage {
-  transform: scale(2.8) translateY(-68px);
+  transform: scale(3.25) translateY(-118px);
 }
 
 .black-room.is-zooming .title-panel {
@@ -524,6 +524,6 @@ h2 {
   }
 
   .black-room.is-zooming .room-stage {
-    transform: scale(3.1) translateY(-58px);
+    transform: scale(3.35) translateY(-88px);
   }
 }

@@ -55,11 +55,6 @@ document.querySelector('#app').innerHTML = `
             <input type="text" name="student-name" autocomplete="username" placeholder="Reuben">
           </label>
 
-          <label>
-            Student access code
-            <input type="password" name="access-code" autocomplete="current-password" placeholder="0000">
-          </label>
-
           <button type="button">Enter</button>
         </form>
       </div>

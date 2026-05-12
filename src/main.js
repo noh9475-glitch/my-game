@@ -44,7 +44,7 @@ document.querySelector('#app').innerHTML = `
 
         <label>
           Student name
-          <input type="text" name="student-name" autocomplete="username" placeholder="Reuben">
+          <input type="text" name="student-name" autocomplete="username" placeholder="Student 01">
         </label>
 
         <button type="button">Enter</button>

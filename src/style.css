@@ -34,6 +34,9 @@ input {
 .black-room {
   position: relative;
   min-height: 100vh;
+  min-height: 100svh;
+  height: 100vh;
+  height: 100svh;
   overflow: hidden;
   background:
     radial-gradient(circle at 50% 8%, rgba(255, 255, 255, 0.13), transparent 19rem),
@@ -73,10 +76,10 @@ input {
 
 .projector {
   position: absolute;
-  top: 70px;
+  top: clamp(34px, 8svh, 70px);
   left: 50%;
   width: min(660px, 82vw);
-  height: 230px;
+  height: clamp(170px, 26svh, 230px);
   transform: translateX(-50%);
 }
 
@@ -107,7 +110,7 @@ input {
 .screen {
   top: 22px;
   width: 76%;
-  height: 150px;
+  height: min(150px, calc(100% - 80px));
   display: grid;
   place-items: center;
   align-content: center;
@@ -142,7 +145,7 @@ input {
 }
 
 .screen-pull {
-  top: 188px;
+  top: min(188px, calc(100% - 42px));
   width: 12px;
   height: 34px;
   border-left: 4px solid #4d4d50;
@@ -162,11 +165,11 @@ input {
 .desks {
   position: absolute;
   left: 50%;
-  top: 330px;
+  top: clamp(220px, 37svh, 330px);
   width: min(1000px, 92vw);
   display: grid;
   grid-template-columns: repeat(3, minmax(150px, 1fr));
-  gap: 46px 78px;
+  gap: clamp(24px, 5svh, 46px) clamp(28px, 7vw, 78px);
   transform: translateX(-50%);
 }
 
@@ -281,7 +284,7 @@ input {
 
 .title-panel {
   position: absolute;
-  top: clamp(625px, 72vh, 760px);
+  bottom: clamp(18px, 6svh, 70px);
   left: 50%;
   width: min(680px, calc(100% - 36px));
   display: grid;
@@ -313,7 +316,7 @@ h1 {
 
 .tagline {
   max-width: 520px;
-  margin: 22px 0 30px;
+  margin: clamp(12px, 2.4svh, 22px) 0 clamp(18px, 3.2svh, 30px);
   line-height: 1.5;
 }
 
@@ -344,7 +347,8 @@ h1 {
   inset: 0;
   display: grid;
   place-items: center;
-  padding: 32px;
+  overflow-y: auto;
+  padding: clamp(18px, 4svh, 32px);
   opacity: 0;
   visibility: hidden;
   transform: scale(1.08);
@@ -357,12 +361,14 @@ h1 {
 .exam-document {
   position: relative;
   width: min(560px, 92vw);
-  min-height: 640px;
+  min-height: min(640px, calc(100svh - 64px));
+  max-height: calc(100svh - 36px);
+  overflow: auto;
   display: grid;
   align-content: start;
-  gap: 24px;
+  gap: clamp(16px, 3svh, 24px);
   border: 4px solid #080808;
-  padding: 42px;
+  padding: clamp(28px, 5svh, 42px);
   color: #070707;
   background:
     linear-gradient(90deg, transparent 0 28px, rgba(0, 0, 0, 0.18) 29px 31px, transparent 32px),
@@ -469,12 +475,12 @@ h2 {
 
 @media (max-width: 760px) {
   .projector {
-    top: 44px;
+    top: clamp(24px, 6svh, 44px);
     width: min(520px, 88vw);
   }
 
   .desks {
-    top: 270px;
+    top: clamp(190px, 35svh, 270px);
     grid-template-columns: repeat(2, minmax(110px, 1fr));
     gap: 38px 28px;
     opacity: 0.62;
@@ -495,7 +501,7 @@ h2 {
   }
 
   .title-panel {
-    top: 560px;
+    bottom: clamp(18px, 5svh, 48px);
   }
 
   h1 {
@@ -504,5 +510,59 @@ h2 {
 
   .black-room.is-zooming .room-stage {
     transform: scale(3.35) translateY(-132px);
+  }
+}
+
+@media (max-height: 680px) {
+  .screen p {
+    font-size: 0.75rem;
+  }
+
+  .screen strong {
+    font-size: clamp(1.35rem, 5svh, 2.35rem);
+  }
+
+  .desks {
+    opacity: 0.5;
+  }
+
+  .desk {
+    height: clamp(46px, 8svh, 64px);
+  }
+
+  .desk::before {
+    bottom: -34px;
+    width: 54px;
+    height: 40px;
+  }
+
+  h1 {
+    font-size: clamp(2.5rem, 11svh, 5rem);
+  }
+}
+
+@media (max-width: 480px) {
+  .back-button {
+    top: 14px;
+    left: 14px;
+    min-height: 38px;
+    padding: 0 12px;
+  }
+
+  .screen {
+    border-width: 4px;
+  }
+
+  .screen-bar {
+    border-width: 2px;
+  }
+
+  .desks {
+    width: min(420px, 90vw);
+    gap: clamp(22px, 4svh, 32px) 18px;
+  }
+
+  .tagline {
+    max-width: 30ch;
   }
 }

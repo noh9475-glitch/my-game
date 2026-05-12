@@ -22,11 +22,8 @@ body,
 }
 
 body {
-  overflow-x: hidden;
-  background:
-    radial-gradient(circle at 50% 8%, rgba(255, 255, 255, 0.13), transparent 19rem),
-    radial-gradient(circle at 50% 70%, rgba(80, 80, 80, 0.12), transparent 35rem),
-    #020203;
+  overflow: hidden;
+  background: #020203;
 }
 
 button,
@@ -34,22 +31,36 @@ input {
   font: inherit;
 }
 
-.login-screen {
+.black-room {
   position: relative;
   min-height: 100vh;
-  display: grid;
-  place-items: center;
-  padding: 32px;
   overflow: hidden;
+  background:
+    radial-gradient(circle at 50% 8%, rgba(255, 255, 255, 0.13), transparent 19rem),
+    radial-gradient(circle at 50% 70%, rgba(80, 80, 80, 0.12), transparent 35rem),
+    #020203;
 }
 
-.room {
+.black-room::after {
+  content: "";
   position: absolute;
   inset: 0;
-  opacity: 0.78;
+  z-index: 4;
+  pointer-events: none;
+  background: radial-gradient(circle at center, transparent 0 46%, rgba(0, 0, 0, 0.92) 84%);
 }
 
-.room::before {
+.room-stage {
+  position: absolute;
+  inset: 0;
+  opacity: 0.82;
+  transform-origin: 50% 52%;
+  transition:
+    transform 1250ms cubic-bezier(0.16, 1, 0.3, 1),
+    opacity 700ms ease;
+}
+
+.room-stage::before {
   content: "";
   position: absolute;
   inset: 0;
@@ -60,16 +71,9 @@ input {
   mask-image: radial-gradient(circle at center, #000 0 55%, transparent 78%);
 }
 
-.room::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background: radial-gradient(circle at center, transparent 0 42%, rgba(0, 0, 0, 0.94) 82%);
-}
-
 .projector {
   position: absolute;
-  top: 42px;
+  top: 34px;
   left: 50%;
   width: min(430px, 72vw);
   height: 160px;
@@ -173,18 +177,77 @@ input {
   opacity: 0.5;
 }
 
-.login-panel {
-  position: relative;
+.focus-desk {
   z-index: 2;
-  width: min(450px, 100%);
-  margin-top: 120px;
-  border: 1px solid rgba(255, 255, 255, 0.28);
-  padding: 28px;
-  background: rgba(3, 3, 5, 0.78);
-  box-shadow:
-    0 0 0 4px rgba(255, 255, 255, 0.04),
-    0 24px 80px rgba(0, 0, 0, 0.75);
-  backdrop-filter: blur(8px);
+}
+
+.open-book {
+  position: absolute;
+  left: 50%;
+  top: 16px;
+  z-index: 3;
+  width: 86px;
+  height: 46px;
+  display: flex;
+  transform: translateX(-62%);
+  filter: drop-shadow(0 6px 1px rgba(0, 0, 0, 0.45));
+}
+
+.book-page {
+  position: relative;
+  width: 50%;
+  height: 100%;
+  background: #d8d8d8;
+  border: 4px solid #ececef;
+}
+
+.left-page {
+  transform: skewY(-3deg);
+}
+
+.right-page {
+  transform: skewY(3deg);
+}
+
+.book-page::before {
+  content: "";
+  position: absolute;
+  inset: 8px 7px;
+  background: repeating-linear-gradient(#b8b8ba 0 2px, transparent 2px 7px);
+  opacity: 0.46;
+}
+
+.pen {
+  position: absolute;
+  left: calc(50% + 65px);
+  top: 28px;
+  z-index: 3;
+  width: 8px;
+  height: 56px;
+  background: linear-gradient(#111, #777 42%, #0b0b0d);
+  transform: rotate(28deg);
+  box-shadow: 4px 4px 0 rgba(0, 0, 0, 0.36);
+}
+
+.title-panel,
+.book-login {
+  position: relative;
+  z-index: 6;
+}
+
+.title-panel {
+  width: min(680px, calc(100% - 36px));
+  min-height: 100vh;
+  display: grid;
+  align-content: center;
+  justify-items: center;
+  margin: 0 auto;
+  padding: 32px 0;
+  text-align: center;
+  transition:
+    opacity 420ms ease,
+    transform 650ms ease,
+    visibility 420ms ease;
 }
 
 .kicker,
@@ -193,17 +256,18 @@ input {
 }
 
 .kicker {
-  margin: 0 0 10px;
+  margin: 0 0 14px;
   font-size: 0.78rem;
   letter-spacing: 0.16em;
   text-transform: uppercase;
 }
 
 h1 {
+  max-width: 10ch;
   margin: 0;
   color: #ffffff;
-  font-size: clamp(2.4rem, 9vw, 4.9rem);
-  line-height: 0.88;
+  font-size: clamp(3.2rem, 12vw, 7rem);
+  line-height: 0.84;
   text-transform: uppercase;
   text-shadow:
     2px 0 #7a7a7d,
@@ -212,40 +276,13 @@ h1 {
 }
 
 .tagline {
-  margin: 18px 0 24px;
+  max-width: 520px;
+  margin: 22px 0 30px;
   line-height: 1.5;
 }
 
-.login-form {
-  display: grid;
-  gap: 14px;
-}
-
-label {
-  display: grid;
-  gap: 7px;
-  color: #cfcfd2;
-  font-size: 0.86rem;
-  text-transform: uppercase;
-}
-
-input {
-  width: 100%;
-  min-height: 44px;
-  border: 1px solid #4d4d52;
-  border-radius: 0;
-  padding: 0 12px;
-  color: #fff;
-  background: #08080b;
-  outline: none;
-}
-
-input:focus {
-  border-color: #f3f3f7;
-  box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.12);
-}
-
-button {
+.start-button,
+.book-sheet button {
   min-height: 48px;
   border: 1px solid #f0f0f2;
   color: #070708;
@@ -256,16 +293,159 @@ button {
   cursor: pointer;
 }
 
-button:hover {
+.start-button {
+  min-width: 180px;
+  padding: 0 28px;
+}
+
+.start-button:hover,
+.book-sheet button:hover {
   background: #d4d4d8;
 }
 
-@media (max-width: 760px) {
-  .login-screen {
-    padding: 18px;
-    place-items: end center;
-  }
+.book-login {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  padding: 32px;
+  opacity: 0;
+  visibility: hidden;
+  transform: scale(1.08);
+  transition:
+    opacity 560ms ease 620ms,
+    transform 680ms cubic-bezier(0.16, 1, 0.3, 1) 620ms,
+    visibility 560ms ease 620ms;
+}
 
+.login-book {
+  position: relative;
+  width: min(760px, 94vw);
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  filter: drop-shadow(0 34px 40px rgba(0, 0, 0, 0.62));
+}
+
+.book-spine {
+  position: absolute;
+  top: 3%;
+  bottom: 3%;
+  left: 50%;
+  z-index: 3;
+  width: 12px;
+  transform: translateX(-50%);
+  background: linear-gradient(90deg, #92908c, #e2dfd7, #8c8982);
+  box-shadow: 0 0 16px rgba(0, 0, 0, 0.5);
+}
+
+.book-sheet {
+  min-height: 430px;
+  border: 5px solid #f0eee5;
+  padding: 42px;
+  color: #181611;
+  background:
+    repeating-linear-gradient(#eee9dc 0 31px, #cfc8b8 32px 33px),
+    #eee9dc;
+}
+
+.book-left {
+  border-right: 0;
+  transform: perspective(900px) rotateY(5deg);
+  transform-origin: right center;
+}
+
+.book-right {
+  display: grid;
+  align-content: center;
+  gap: 20px;
+  border-left: 0;
+  transform: perspective(900px) rotateY(-5deg);
+  transform-origin: left center;
+}
+
+.book-label {
+  margin: 0 0 18px;
+  font-size: 0.78rem;
+  font-weight: 800;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+h2 {
+  max-width: 9ch;
+  margin: 0 0 42px;
+  font-size: clamp(2rem, 6vw, 4rem);
+  line-height: 0.9;
+  text-transform: uppercase;
+}
+
+.scribble {
+  height: 16px;
+  margin: 17px 0;
+  background: repeating-linear-gradient(90deg, #777 0 20px, transparent 20px 28px);
+  opacity: 0.22;
+}
+
+.line-one {
+  width: 76%;
+}
+
+.line-two {
+  width: 62%;
+}
+
+.line-three {
+  width: 84%;
+}
+
+.book-sheet label {
+  display: grid;
+  gap: 8px;
+  color: #2b2923;
+  font-size: 0.86rem;
+  font-weight: 800;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.book-sheet input {
+  width: 100%;
+  min-height: 46px;
+  border: 0;
+  border-bottom: 3px solid #302d25;
+  border-radius: 0;
+  padding: 0 4px;
+  color: #111;
+  background: transparent;
+  outline: none;
+}
+
+.book-sheet input:focus {
+  border-bottom-color: #000;
+  box-shadow: 0 8px 0 -5px rgba(0, 0, 0, 0.16);
+}
+
+.black-room.is-zooming .room-stage {
+  transform: scale(2.8) translateY(-68px);
+}
+
+.black-room.is-zooming .title-panel {
+  opacity: 0;
+  visibility: hidden;
+  transform: scale(0.9) translateY(-24px);
+}
+
+.black-room.is-login .room-stage {
+  opacity: 0.22;
+}
+
+.black-room.is-login .book-login {
+  opacity: 1;
+  visibility: visible;
+  transform: scale(1);
+}
+
+@media (max-width: 760px) {
   .projector {
     top: 30px;
   }
@@ -274,16 +454,43 @@ button:hover {
     top: 205px;
     grid-template-columns: repeat(2, minmax(110px, 1fr));
     gap: 38px 28px;
-    opacity: 0.55;
+    opacity: 0.62;
   }
 
   .desk {
     height: 58px;
   }
 
-  .login-panel {
-    margin-top: 0;
-    margin-bottom: 24px;
-    padding: 22px;
+  .open-book {
+    width: 66px;
+    height: 36px;
+  }
+
+  .pen {
+    left: calc(50% + 48px);
+    top: 20px;
+    height: 44px;
+  }
+
+  .login-book {
+    grid-template-columns: 1fr;
+  }
+
+  .book-left {
+    display: none;
+  }
+
+  .book-right {
+    min-height: auto;
+    border-left: 5px solid #f0eee5;
+    transform: none;
+  }
+
+  .book-spine {
+    display: none;
+  }
+
+  .black-room.is-zooming .room-stage {
+    transform: scale(3.1) translateY(-58px);
   }
 }

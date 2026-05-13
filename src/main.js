@@ -1,10 +1,26 @@
 import './style.css'
 
 const specializationSkills = [
-  'Persuading',
-  'Photographic Memory',
-  'Grand Master',
-  'True Understanding',
+  {
+    name: 'Persuading',
+    description: 'Your words find weak points. Teachers and classmates become easier to move.',
+  },
+  {
+    name: 'Photographic Memory',
+    description: 'Pages stay with you after one look. Study faster and hold steadier under test pressure.',
+  },
+  {
+    name: 'Grand Master',
+    description: 'You read the board before others see the game. Chess tactics and long plans sharpen.',
+  },
+  {
+    name: 'True Understanding',
+    description: 'You do not just memorize the lesson. You see why it works.',
+  },
+  {
+    name: 'Unseen Manipulator',
+    description: 'Your influence works from the edges of the room, noticed only after choices are made.',
+  },
 ]
 
 document.querySelector('#app').innerHTML = `
@@ -108,8 +124,11 @@ document.querySelector('#app').innerHTML = `
           <div class="skill-list" aria-label="Specialization skills">
             ${specializationSkills.map((skill) => `
               <label class="skill-option">
-                <input type="checkbox" name="specializations" value="${skill}" data-skill-option>
-                <span>${skill}</span>
+                <input type="checkbox" name="specializations" value="${skill.name}" data-skill-option>
+                <span>
+                  <strong>${skill.name}</strong>
+                  <small>${skill.description}</small>
+                </span>
               </label>
             `).join('')}
           </div>

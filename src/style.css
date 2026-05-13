@@ -663,23 +663,40 @@ h2 {
 
 .skill-list {
   display: grid;
-  gap: 12px;
+  gap: 10px;
 }
 
 .skill-option {
   display: grid;
   grid-template-columns: auto 1fr;
-  align-items: center;
+  align-items: start;
   gap: 12px;
   border: 2px solid rgba(0, 0, 0, 0.68);
-  padding: 13px 14px;
+  padding: 12px 14px;
   color: #111;
   background: rgba(255, 255, 255, 0.24);
   font-size: 0.92rem;
-  font-weight: 800;
+  cursor: pointer;
+}
+
+.skill-option strong,
+.skill-option small {
+  display: block;
+}
+
+.skill-option strong {
+  font-weight: 900;
   letter-spacing: 0.04em;
   text-transform: uppercase;
-  cursor: pointer;
+}
+
+.skill-option small {
+  margin-top: 5px;
+  font-size: 0.78rem;
+  font-weight: 700;
+  line-height: 1.35;
+  letter-spacing: 0;
+  text-transform: none;
 }
 
 .skill-option:has(input:checked) {
@@ -695,6 +712,7 @@ h2 {
 .skill-option input {
   width: 1.1rem;
   height: 1.1rem;
+  margin-top: 2px;
   accent-color: #111;
 }
 

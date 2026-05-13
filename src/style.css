@@ -529,6 +529,11 @@ h2 {
   font-size: clamp(2.2rem, 6.2vw, 4rem);
 }
 
+.specialization-page h2 {
+  max-width: 11ch;
+  font-size: clamp(2rem, 5.6vw, 3.55rem);
+}
+
 .document-warning {
   max-width: 34ch;
   margin: 0 0 20px;
@@ -571,6 +576,7 @@ h2 {
   text-transform: uppercase;
 }
 
+.specialization-counter,
 .points-panel {
   display: flex;
   align-items: center;
@@ -582,15 +588,44 @@ h2 {
   text-transform: uppercase;
 }
 
+.specialization-counter span,
 .points-panel span {
   font-size: 0.82rem;
 }
 
+.specialization-counter strong,
 .points-panel strong {
   min-width: 2.6ch;
   font-size: 2.15rem;
   line-height: 1;
   text-align: right;
+}
+
+.exam-page {
+  grid-area: 1 / 1;
+  display: grid;
+  align-content: start;
+  gap: clamp(14px, 2.2svh, 20px);
+  transition:
+    opacity 380ms ease,
+    transform 520ms cubic-bezier(0.16, 1, 0.3, 1),
+    visibility 380ms ease;
+}
+
+.character-sheet {
+  grid-template-columns: 1fr;
+}
+
+.stats-page {
+  opacity: 1;
+  visibility: visible;
+  transform: translateX(0) rotate(0);
+}
+
+.specialization-page {
+  opacity: 0;
+  visibility: hidden;
+  transform: translateX(42px) rotate(1.6deg);
 }
 
 .exam-body {
@@ -624,6 +659,43 @@ h2 {
   padding: 4px 0;
   text-align: center;
   background: rgba(255, 255, 255, 0.36);
+}
+
+.skill-list {
+  display: grid;
+  gap: 12px;
+}
+
+.skill-option {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  align-items: center;
+  gap: 12px;
+  border: 2px solid rgba(0, 0, 0, 0.68);
+  padding: 13px 14px;
+  color: #111;
+  background: rgba(255, 255, 255, 0.24);
+  font-size: 0.92rem;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  cursor: pointer;
+}
+
+.skill-option:has(input:checked) {
+  background: rgba(0, 0, 0, 0.12);
+  box-shadow: inset 0 0 0 3px rgba(0, 0, 0, 0.12);
+}
+
+.skill-option:has(input:disabled:not(:checked)) {
+  opacity: 0.46;
+  cursor: not-allowed;
+}
+
+.skill-option input {
+  width: 1.1rem;
+  height: 1.1rem;
+  accent-color: #111;
 }
 
 .exam-document input {
@@ -697,6 +769,18 @@ h2 {
   opacity: 1;
   visibility: visible;
   transform: translateY(0) scale(1) rotate(0);
+}
+
+.black-room.is-specialization .stats-page {
+  opacity: 0;
+  visibility: hidden;
+  transform: translateX(-42px) rotate(-1.4deg);
+}
+
+.black-room.is-specialization .specialization-page {
+  opacity: 1;
+  visibility: visible;
+  transform: translateX(0) rotate(0);
 }
 
 .black-room.is-login .back-button {

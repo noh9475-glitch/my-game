@@ -1,5 +1,12 @@
 import './style.css'
 
+const specializationSkills = [
+  'Persuading',
+  'Photographic Memory',
+  'Grand Master',
+  'True Understanding',
+]
+
 document.querySelector('#app').innerHTML = `
   <main class="black-room" aria-label="The Black Room">
     <button id="back-button" class="back-button" type="button" aria-label="Back to start">Back</button>
@@ -59,31 +66,56 @@ document.querySelector('#app').innerHTML = `
 
     <section class="character-exam" aria-label="Entry exam statistics page">
       <form class="character-sheet">
-        <div class="exam-meta">
-          <p class="document-code">Entry Exam ST-01</p>
-          <p class="page-number">Page 01</p>
-        </div>
-        <h2>Entry Exam</h2>
-        <p class="document-warning">Declare your statistics for the room. Fifteen marks may be spent. None will be returned.</p>
+        <section class="exam-page stats-page" aria-label="Entry exam page one statistics">
+          <div class="exam-meta">
+            <p class="document-code">Entry Exam ST-01</p>
+            <p class="page-number">Page 01</p>
+          </div>
+          <h2>Entry Exam</h2>
+          <p class="document-warning">Declare your statistics for the room. Fifteen marks may be spent. None will be returned.</p>
 
-        <div class="points-panel" aria-live="polite">
-          <span>Points remaining</span>
-          <strong id="points-remaining">15</strong>
-        </div>
+          <div class="points-panel" aria-live="polite">
+            <span>Points remaining</span>
+            <strong id="points-remaining">15</strong>
+          </div>
 
-        <div class="exam-body">
-          <div class="stat-list" aria-label="Entry exam stats">
-            ${['Charisma', 'Intelligence', 'Strength', 'Stamina', 'Knowledge'].map((stat) => `
-              <label class="stat-control">
-                <span>${stat}</span>
-                <input type="range" name="${stat.toLowerCase()}" min="0" max="15" value="0" step="1" data-stat-slider>
-                <output>0</output>
+          <div class="exam-body">
+            <div class="stat-list" aria-label="Entry exam stats">
+              ${['Charisma', 'Intelligence', 'Strength', 'Stamina', 'Knowledge'].map((stat) => `
+                <label class="stat-control">
+                  <span>${stat}</span>
+                  <input type="range" name="${stat.toLowerCase()}" min="0" max="15" value="0" step="1" data-stat-slider>
+                  <output>0</output>
+                </label>
+              `).join('')}
+            </div>
+          </div>
+        </section>
+
+        <section class="exam-page specialization-page" aria-label="Entry exam page two specializations">
+          <div class="exam-meta">
+            <p class="document-code">Entry Exam SP-02</p>
+            <p class="page-number">Page 02</p>
+          </div>
+          <h2>Specialization</h2>
+          <p class="document-warning">Which skills answer when the room calls? Select two. No more. No less.</p>
+
+          <div class="specialization-counter" aria-live="polite">
+            <span>Selections remaining</span>
+            <strong id="skills-remaining">2</strong>
+          </div>
+
+          <div class="skill-list" aria-label="Specialization skills">
+            ${specializationSkills.map((skill) => `
+              <label class="skill-option">
+                <input type="checkbox" name="specializations" value="${skill}" data-skill-option>
+                <span>${skill}</span>
               </label>
             `).join('')}
           </div>
-        </div>
+        </section>
 
-        <button id="finalize-character-button" type="button">Finalize Entry</button>
+        <button id="turn-page-button" type="button">Turn The Page</button>
       </form>
     </section>
   </main>
@@ -92,13 +124,16 @@ document.querySelector('#app').innerHTML = `
 const startButton = document.querySelector('#start-button')
 const backButton = document.querySelector('#back-button')
 const submitFormButton = document.querySelector('#submit-form-button')
-const finalizeCharacterButton = document.querySelector('#finalize-character-button')
+const turnPageButton = document.querySelector('#turn-page-button')
 const screen = document.querySelector('.black-room')
 const sceneShell = document.querySelector('.scene-shell')
 const stampMark = document.querySelector('.stamp-mark')
 const statSliders = [...document.querySelectorAll('[data-stat-slider]')]
+const skillOptions = [...document.querySelectorAll('[data-skill-option]')]
 const pointsRemaining = document.querySelector('#points-remaining')
+const skillsRemaining = document.querySelector('#skills-remaining')
 const statPointLimit = 15
+const skillSelectionLimit = 2
 
 const fitScene = () => {
   const scale = Math.min(window.innerWidth / 1000, window.innerHeight / 900)
@@ -117,6 +152,7 @@ startButton.addEventListener('click', () => {
 })
 
 backButton.addEventListener('click', () => {
+  screen.classList.remove('is-specialization')
   screen.classList.remove('is-exam')
   screen.classList.remove('is-login')
 
@@ -152,11 +188,40 @@ const updateStatPoints = (changedSlider) => {
   pointsRemaining.textContent = statPointLimit - spent
   const pointsComplete = spent === statPointLimit
   screen.classList.toggle('is-points-complete', pointsComplete)
-  finalizeCharacterButton.disabled = !pointsComplete
+  turnPageButton.disabled = !pointsComplete
 }
 
 statSliders.forEach((slider) => {
   slider.addEventListener('input', () => updateStatPoints(slider))
 })
 
-finalizeCharacterButton.disabled = true
+const updateSkillSelections = () => {
+  const selectedCount = skillOptions.filter((option) => option.checked).length
+  const selectionsComplete = selectedCount === skillSelectionLimit
+
+  skillsRemaining.textContent = skillSelectionLimit - selectedCount
+  screen.classList.toggle('is-skills-complete', selectionsComplete)
+
+  if (screen.classList.contains('is-specialization')) {
+    turnPageButton.disabled = !selectionsComplete
+  }
+
+  skillOptions.forEach((option) => {
+    option.disabled = !option.checked && selectedCount >= skillSelectionLimit
+  })
+}
+
+skillOptions.forEach((option) => {
+  option.addEventListener('change', updateSkillSelections)
+})
+
+turnPageButton.addEventListener('click', () => {
+  if (!screen.classList.contains('is-specialization')) {
+    screen.classList.add('is-specialization')
+    turnPageButton.textContent = 'Finalize Entry'
+    turnPageButton.disabled = true
+    return
+  }
+})
+
+turnPageButton.disabled = true

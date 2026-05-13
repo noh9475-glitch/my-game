@@ -56,15 +56,51 @@ document.querySelector('#app').innerHTML = `
         <button id="submit-form-button" type="button">Submit Form</button>
       </form>
     </section>
+
+    <section class="character-exam" aria-label="Character creation entry exam">
+      <form class="character-sheet">
+        <p class="document-code">Entry Exam CC-01</p>
+        <h2>Character Creation Entry Exam</h2>
+        <p class="document-warning">Assign exactly fifteen points before the room decides for you.</p>
+
+        <div class="points-panel" aria-live="polite">
+          <span>Points remaining</span>
+          <strong id="points-remaining">15</strong>
+        </div>
+
+        <div class="exam-body">
+          <div class="stat-list" aria-label="Entry exam stats">
+            ${['Charisma', 'Intell', 'Strength', 'Stamina', 'Knowledge'].map((stat) => `
+              <label class="stat-control">
+                <span>${stat}</span>
+                <input type="range" name="${stat.toLowerCase()}" min="0" max="15" value="0" step="1" data-stat-slider>
+                <output>0</output>
+              </label>
+            `).join('')}
+          </div>
+
+          <div class="exam-extension-space">
+            <h3>Additional Assessment</h3>
+            <div class="exam-lines" aria-hidden="true"></div>
+          </div>
+        </div>
+
+        <button id="finalize-character-button" type="button">Finalize Entry</button>
+      </form>
+    </section>
   </main>
 `
 
 const startButton = document.querySelector('#start-button')
 const backButton = document.querySelector('#back-button')
 const submitFormButton = document.querySelector('#submit-form-button')
+const finalizeCharacterButton = document.querySelector('#finalize-character-button')
 const screen = document.querySelector('.black-room')
 const sceneShell = document.querySelector('.scene-shell')
 const stampMark = document.querySelector('.stamp-mark')
+const statSliders = [...document.querySelectorAll('[data-stat-slider]')]
+const pointsRemaining = document.querySelector('#points-remaining')
+const statPointLimit = 15
 
 const fitScene = () => {
   const scale = Math.min(window.innerWidth / 1000, window.innerHeight / 900)
@@ -83,6 +119,7 @@ startButton.addEventListener('click', () => {
 })
 
 backButton.addEventListener('click', () => {
+  screen.classList.remove('is-exam')
   screen.classList.remove('is-login')
 
   window.setTimeout(() => {
@@ -94,4 +131,34 @@ submitFormButton.addEventListener('click', () => {
   stampMark.classList.remove('is-stamped')
   void stampMark.offsetWidth
   stampMark.classList.add('is-stamped')
+
+  window.setTimeout(() => {
+    screen.classList.add('is-exam')
+  }, 760)
 })
+
+const updateStatPoints = (changedSlider) => {
+  const spentBeforeChange = statSliders
+    .filter((slider) => slider !== changedSlider)
+    .reduce((total, slider) => total + Number(slider.value), 0)
+
+  const allowedValue = Math.min(Number(changedSlider.value), statPointLimit - spentBeforeChange)
+  changedSlider.value = String(allowedValue)
+
+  const spent = statSliders.reduce((total, slider) => {
+    const value = Number(slider.value)
+    slider.nextElementSibling.value = value
+    return total + value
+  }, 0)
+
+  pointsRemaining.textContent = statPointLimit - spent
+  const pointsComplete = spent === statPointLimit
+  screen.classList.toggle('is-points-complete', pointsComplete)
+  finalizeCharacterButton.disabled = !pointsComplete
+}
+
+statSliders.forEach((slider) => {
+  slider.addEventListener('input', () => updateStatPoints(slider))
+})
+
+finalizeCharacterButton.disabled = true

@@ -21,6 +21,18 @@ const specializationSkills = [
     name: 'Unseen Manipulator',
     description: 'Your influence works from the edges of the room, noticed only after choices are made.',
   },
+  {
+    name: 'Classroom Leader',
+    description: 'The class looks your way before it decides. Group pressure bends toward your call.',
+  },
+  {
+    name: 'Elite Sportsman',
+    description: 'Training shows in every sprint, contest, and recovery. Physical trials favor you.',
+  },
+  {
+    name: 'Steroid Abuser',
+    description: 'Power was borrowed at a cost. Strength rises, but the room keeps the receipt.',
+  },
 ]
 
 document.querySelector('#app').innerHTML = `
@@ -121,16 +133,18 @@ document.querySelector('#app').innerHTML = `
             <strong id="skills-remaining">2</strong>
           </div>
 
-          <div class="skill-list" aria-label="Specialization skills">
-            ${specializationSkills.map((skill) => `
-              <label class="skill-option">
-                <input type="checkbox" name="specializations" value="${skill.name}" data-skill-option>
-                <span>
-                  <strong>${skill.name}</strong>
-                  <small>${skill.description}</small>
-                </span>
-              </label>
-            `).join('')}
+          <div class="skill-scroll" tabindex="0">
+            <div class="skill-list" aria-label="Specialization skills">
+              ${specializationSkills.map((skill) => `
+                <label class="skill-option">
+                  <input type="checkbox" name="specializations" value="${skill.name}" data-skill-option>
+                  <span>
+                    <strong>${skill.name}</strong>
+                    <small>${skill.description}</small>
+                  </span>
+                </label>
+              `).join('')}
+            </div>
           </div>
         </section>
 

@@ -327,6 +327,8 @@ input {
 .start-button,
 .exam-document button,
 .character-sheet button {
+  position: relative;
+  z-index: 5;
   min-height: 48px;
   border: 1px solid #f0f0f2;
   color: #070708;

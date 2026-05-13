@@ -153,6 +153,7 @@ const pointsRemaining = document.querySelector('#points-remaining')
 const skillsRemaining = document.querySelector('#skills-remaining')
 const statPointLimit = 15
 const skillSelectionLimit = 2
+let suppressNextClick = false
 
 const fitScene = () => {
   const scale = Math.min(window.innerWidth / 1000, window.innerHeight / 900)
@@ -162,15 +163,52 @@ const fitScene = () => {
 fitScene()
 window.addEventListener('resize', fitScene)
 
-startButton.addEventListener('click', () => {
+const isInteractiveElement = (element) => {
+  const styles = window.getComputedStyle(element)
+
+  return (
+    styles.visibility !== 'hidden'
+    && styles.display !== 'none'
+    && Number(styles.opacity) > 0.05
+    && !element.disabled
+  )
+}
+
+const isPointInside = (event, element) => {
+  const rect = element.getBoundingClientRect()
+
+  return (
+    event.clientX >= rect.left
+    && event.clientX <= rect.right
+    && event.clientY >= rect.top
+    && event.clientY <= rect.bottom
+  )
+}
+
+const runFromPointer = (event, element, action) => {
+  if (!isInteractiveElement(element) || !isPointInside(event, element)) {
+    return false
+  }
+
+  suppressNextClick = true
+  event.preventDefault()
+  action()
+  window.setTimeout(() => {
+    suppressNextClick = false
+  }, 250)
+
+  return true
+}
+
+const beginEntry = () => {
   screen.classList.add('is-zooming')
 
   window.setTimeout(() => {
     screen.classList.add('is-login')
   }, 900)
-})
+}
 
-backButton.addEventListener('click', () => {
+const goBack = () => {
   screen.classList.remove('is-specialization')
   screen.classList.remove('is-exam')
   screen.classList.remove('is-login')
@@ -178,9 +216,9 @@ backButton.addEventListener('click', () => {
   window.setTimeout(() => {
     screen.classList.remove('is-zooming')
   }, 120)
-})
+}
 
-submitFormButton.addEventListener('click', () => {
+const submitEntryForm = () => {
   stampMark.classList.remove('is-stamped')
   void stampMark.offsetWidth
   stampMark.classList.add('is-stamped')
@@ -188,7 +226,35 @@ submitFormButton.addEventListener('click', () => {
   window.setTimeout(() => {
     screen.classList.add('is-exam')
   }, 760)
-})
+}
+
+const turnExamPage = () => {
+  if (!screen.classList.contains('is-specialization')) {
+    screen.classList.add('is-specialization')
+    turnPageButton.textContent = 'Finalize Entry'
+    turnPageButton.disabled = true
+  }
+}
+
+const handleClick = (action) => (event) => {
+  if (suppressNextClick) {
+    event.preventDefault()
+    return
+  }
+
+  action()
+}
+
+screen.addEventListener('pointerup', (event) => {
+  runFromPointer(event, backButton, goBack)
+    || runFromPointer(event, startButton, beginEntry)
+    || runFromPointer(event, submitFormButton, submitEntryForm)
+    || runFromPointer(event, turnPageButton, turnExamPage)
+}, true)
+
+startButton.addEventListener('click', handleClick(beginEntry))
+backButton.addEventListener('click', handleClick(goBack))
+submitFormButton.addEventListener('click', handleClick(submitEntryForm))
 
 const updateStatPoints = (changedSlider) => {
   const spentBeforeChange = statSliders
@@ -234,13 +300,6 @@ skillOptions.forEach((option) => {
   option.addEventListener('change', updateSkillSelections)
 })
 
-turnPageButton.addEventListener('click', () => {
-  if (!screen.classList.contains('is-specialization')) {
-    screen.classList.add('is-specialization')
-    turnPageButton.textContent = 'Finalize Entry'
-    turnPageButton.disabled = true
-    return
-  }
-})
+turnPageButton.addEventListener('click', handleClick(turnExamPage))
 
 turnPageButton.disabled = true

@@ -57,11 +57,14 @@ document.querySelector('#app').innerHTML = `
       </form>
     </section>
 
-    <section class="character-exam" aria-label="Character creation entry exam">
+    <section class="character-exam" aria-label="Entry exam statistics page">
       <form class="character-sheet">
-        <p class="document-code">Entry Exam CC-01</p>
-        <h2>Character Creation Entry Exam</h2>
-        <p class="document-warning">Assign exactly fifteen points before the room decides for you.</p>
+        <div class="exam-meta">
+          <p class="document-code">Entry Exam ST-01</p>
+          <p class="page-number">Page 01</p>
+        </div>
+        <h2>Entry Exam</h2>
+        <p class="document-warning">Declare your statistics for the room. Fifteen marks may be spent. None will be returned.</p>
 
         <div class="points-panel" aria-live="polite">
           <span>Points remaining</span>
@@ -70,18 +73,13 @@ document.querySelector('#app').innerHTML = `
 
         <div class="exam-body">
           <div class="stat-list" aria-label="Entry exam stats">
-            ${['Charisma', 'Intell', 'Strength', 'Stamina', 'Knowledge'].map((stat) => `
+            ${['Charisma', 'Intelligence', 'Strength', 'Stamina', 'Knowledge'].map((stat) => `
               <label class="stat-control">
                 <span>${stat}</span>
                 <input type="range" name="${stat.toLowerCase()}" min="0" max="15" value="0" step="1" data-stat-slider>
                 <output>0</output>
               </label>
             `).join('')}
-          </div>
-
-          <div class="exam-extension-space">
-            <h3>Additional Assessment</h3>
-            <div class="exam-lines" aria-hidden="true"></div>
           </div>
         </div>
 

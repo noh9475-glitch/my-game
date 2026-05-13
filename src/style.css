@@ -411,8 +411,8 @@ input {
 }
 
 .character-sheet {
-  width: min(720px, 94vw);
-  gap: clamp(12px, 1.8svh, 16px);
+  width: min(620px, 94vw);
+  gap: clamp(14px, 2.2svh, 20px);
   transform-origin: 50% 12%;
 }
 
@@ -524,15 +524,41 @@ h2 {
 }
 
 .character-sheet h2 {
-  max-width: 10ch;
+  max-width: 8ch;
   padding-right: 92px;
-  font-size: clamp(1.9rem, 5.4vw, 3.35rem);
+  font-size: clamp(2.2rem, 6.2vw, 4rem);
 }
 
 .document-warning {
   max-width: 34ch;
   margin: 0 0 20px;
   line-height: 1.45;
+}
+
+.character-sheet .document-warning {
+  max-width: 42ch;
+  margin-bottom: 0;
+}
+
+.exam-meta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18px;
+}
+
+.exam-meta .document-code,
+.page-number {
+  margin: 0;
+}
+
+.page-number {
+  border: 2px solid rgba(0, 0, 0, 0.68);
+  padding: 6px 10px;
+  font-size: 0.8rem;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
 }
 
 .exam-document label {
@@ -568,20 +594,17 @@ h2 {
 }
 
 .exam-body {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(180px, 0.72fr);
-  gap: 20px;
-  align-items: start;
+  display: block;
 }
 
 .stat-list {
   display: grid;
-  gap: 11px;
+  gap: 14px;
 }
 
 .stat-control {
   display: grid;
-  grid-template-columns: 7.6rem 1fr 2.2rem;
+  grid-template-columns: 8.8rem 1fr 2.2rem;
   align-items: center;
   gap: 12px;
   color: #111;
@@ -601,29 +624,6 @@ h2 {
   padding: 4px 0;
   text-align: center;
   background: rgba(255, 255, 255, 0.36);
-}
-
-.exam-extension-space {
-  min-height: 238px;
-  border: 2px solid rgba(0, 0, 0, 0.58);
-  padding: 14px;
-  background: rgba(255, 255, 255, 0.2);
-}
-
-.exam-extension-space h3 {
-  margin: 0 0 10px;
-  font-size: 0.84rem;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-}
-
-.exam-lines {
-  min-height: 180px;
-  background: repeating-linear-gradient(
-    transparent 0 27px,
-    rgba(0, 0, 0, 0.24) 28px 29px,
-    transparent 30px
-  );
 }
 
 .exam-document input {
@@ -720,13 +720,6 @@ h2 {
     grid-column: 1 / -1;
   }
 
-  .exam-body {
-    grid-template-columns: 1fr;
-  }
-
-  .exam-extension-space {
-    min-height: 160px;
-  }
 }
 
 @media (max-height: 680px) {

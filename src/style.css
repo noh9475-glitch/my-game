@@ -792,6 +792,7 @@ h2 {
   visibility: hidden;
   transform: translateY(-36px) scale(0.96);
   transition-delay: 0ms;
+  pointer-events: none;
 }
 
 .black-room.is-exam .character-exam {

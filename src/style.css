@@ -65,6 +65,11 @@ input {
   transform-origin: center;
 }
 
+.black-room.is-login .scene-shell,
+.black-room.is-exam .scene-shell {
+  pointer-events: none;
+}
+
 .room-stage {
   position: absolute;
   inset: 0;
@@ -357,6 +362,7 @@ input {
   place-items: center;
   overflow-y: auto;
   padding: clamp(18px, 4svh, 32px);
+  pointer-events: none;
 }
 
 .document-login {
@@ -425,6 +431,7 @@ input {
   border: 3px double rgba(0, 0, 0, 0.42);
   transform: rotate(4deg);
   opacity: 0.35;
+  pointer-events: none;
 }
 
 .exam-document::after {
@@ -437,6 +444,7 @@ input {
   height: 86px;
   border: 3px solid rgba(0, 0, 0, 0.55);
   opacity: 0.38;
+  pointer-events: none;
 }
 
 .stamp-mark {
@@ -610,6 +618,7 @@ h2 {
     opacity 380ms ease,
     transform 520ms cubic-bezier(0.16, 1, 0.3, 1),
     visibility 380ms ease;
+  pointer-events: none;
 }
 
 .character-sheet {
@@ -620,6 +629,7 @@ h2 {
   opacity: 1;
   visibility: visible;
   transform: translateX(0) rotate(0);
+  pointer-events: auto;
 }
 
 .specialization-page {
@@ -774,6 +784,7 @@ h2 {
   opacity: 1;
   visibility: visible;
   transform: scale(1);
+  pointer-events: auto;
 }
 
 .black-room.is-exam .document-login {
@@ -787,18 +798,21 @@ h2 {
   opacity: 1;
   visibility: visible;
   transform: translateY(0) scale(1) rotate(0);
+  pointer-events: auto;
 }
 
 .black-room.is-specialization .stats-page {
   opacity: 0;
   visibility: hidden;
   transform: translateX(-42px) rotate(-1.4deg);
+  pointer-events: none;
 }
 
 .black-room.is-specialization .specialization-page {
   opacity: 1;
   visibility: visible;
   transform: translateX(0) rotate(0);
+  pointer-events: auto;
 }
 
 .black-room.is-login .back-button {

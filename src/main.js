@@ -37,7 +37,7 @@ const specializationSkills = [
 
 document.querySelector('#app').innerHTML = `
   <main class="black-room" aria-label="The Black Room">
-    <button id="back-button" class="back-button" type="button" aria-label="Back to start">Back</button>
+    <button id="back-button" class="back-button" type="button" aria-label="Back to start" data-action-button>Back</button>
 
     <div class="scene-shell">
       <section class="room-stage" aria-hidden="true">
@@ -67,7 +67,7 @@ document.querySelector('#app').innerHTML = `
 
       <section class="title-panel" aria-label="Start screen">
         <p class="tagline">One desk awaits. Your exam has already begun.</p>
-        <button id="start-button" class="start-button" type="button">Begin</button>
+        <button id="start-button" class="start-button" type="button" data-action-button>Begin</button>
       </section>
     </div>
 
@@ -88,7 +88,7 @@ document.querySelector('#app').innerHTML = `
           <input type="text" name="student-name" autocomplete="username" placeholder="Student 01">
         </label>
 
-        <button id="submit-form-button" type="button">Submit Form</button>
+        <button id="submit-form-button" type="button" data-action-button>Submit Form</button>
       </form>
     </section>
 
@@ -148,7 +148,7 @@ document.querySelector('#app').innerHTML = `
           </div>
         </section>
 
-        <button id="turn-page-button" type="button">Turn The Page</button>
+        <button id="turn-page-button" type="button" data-action-button>Turn The Page</button>
       </form>
     </section>
   </main>
@@ -167,7 +167,6 @@ const pointsRemaining = document.querySelector('#points-remaining')
 const skillsRemaining = document.querySelector('#skills-remaining')
 const statPointLimit = 15
 const skillSelectionLimit = 2
-let suppressNextClick = false
 
 const fitScene = () => {
   const scale = Math.min(window.innerWidth / 1000, window.innerHeight / 900)
@@ -176,43 +175,6 @@ const fitScene = () => {
 
 fitScene()
 window.addEventListener('resize', fitScene)
-
-const isInteractiveElement = (element) => {
-  const styles = window.getComputedStyle(element)
-
-  return (
-    styles.visibility !== 'hidden'
-    && styles.display !== 'none'
-    && Number(styles.opacity) > 0.05
-    && !element.disabled
-  )
-}
-
-const isPointInside = (event, element) => {
-  const rect = element.getBoundingClientRect()
-
-  return (
-    event.clientX >= rect.left
-    && event.clientX <= rect.right
-    && event.clientY >= rect.top
-    && event.clientY <= rect.bottom
-  )
-}
-
-const runFromPointer = (event, element, action) => {
-  if (!isInteractiveElement(element) || !isPointInside(event, element)) {
-    return false
-  }
-
-  suppressNextClick = true
-  event.preventDefault()
-  action()
-  window.setTimeout(() => {
-    suppressNextClick = false
-  }, 250)
-
-  return true
-}
 
 const beginEntry = () => {
   screen.classList.add('is-zooming')
@@ -250,25 +212,20 @@ const turnExamPage = () => {
   }
 }
 
-const handleClick = (action) => (event) => {
-  if (suppressNextClick) {
-    event.preventDefault()
-    return
-  }
+const bindActionButton = (button, action) => {
+  button.addEventListener('click', (event) => {
+    if (button.disabled) {
+      event.preventDefault()
+      return
+    }
 
-  action()
+    action()
+  })
 }
 
-screen.addEventListener('pointerup', (event) => {
-  runFromPointer(event, backButton, goBack)
-    || runFromPointer(event, startButton, beginEntry)
-    || runFromPointer(event, submitFormButton, submitEntryForm)
-    || runFromPointer(event, turnPageButton, turnExamPage)
-}, true)
-
-startButton.addEventListener('click', handleClick(beginEntry))
-backButton.addEventListener('click', handleClick(goBack))
-submitFormButton.addEventListener('click', handleClick(submitEntryForm))
+bindActionButton(startButton, beginEntry)
+bindActionButton(backButton, goBack)
+bindActionButton(submitFormButton, submitEntryForm)
 
 const updateStatPoints = (changedSlider) => {
   const spentBeforeChange = statSliders
@@ -314,6 +271,6 @@ skillOptions.forEach((option) => {
   option.addEventListener('change', updateSkillSelections)
 })
 
-turnPageButton.addEventListener('click', handleClick(turnExamPage))
+bindActionButton(turnPageButton, turnExamPage)
 
 turnPageButton.disabled = true

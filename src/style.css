@@ -31,6 +31,10 @@ input {
   font: inherit;
 }
 
+button {
+  border-radius: 0;
+}
+
 .black-room {
   position: relative;
   min-height: 100vh;
@@ -75,6 +79,7 @@ input {
   inset: 0;
   opacity: 0.82;
   transform-origin: 50% 63%;
+  pointer-events: none;
   transition:
     transform 1250ms cubic-bezier(0.16, 1, 0.3, 1),
     opacity 700ms ease;
@@ -290,6 +295,7 @@ input {
   opacity: 0;
   visibility: hidden;
   transform: translateX(-12px);
+  pointer-events: none;
   transition:
     opacity 240ms ease,
     transform 240ms ease,
@@ -328,7 +334,7 @@ input {
 .exam-document button,
 .character-sheet button {
   position: relative;
-  z-index: 5;
+  z-index: 10;
   min-height: 48px;
   border: 1px solid #f0f0f2;
   color: #070708;
@@ -337,6 +343,12 @@ input {
   letter-spacing: 0.08em;
   text-transform: uppercase;
   cursor: pointer;
+}
+
+[data-action-button] {
+  pointer-events: auto;
+  touch-action: manipulation;
+  user-select: none;
 }
 
 .start-button {
@@ -348,6 +360,14 @@ input {
 .exam-document button:hover,
 .character-sheet button:hover {
   background: #d4d4d8;
+}
+
+.start-button:focus-visible,
+.back-button:focus-visible,
+.exam-document button:focus-visible,
+.character-sheet button:focus-visible {
+  outline: 3px solid rgba(255, 255, 255, 0.86);
+  outline-offset: 4px;
 }
 
 .character-sheet button:disabled {
@@ -856,6 +876,7 @@ h2 {
   opacity: 1;
   visibility: visible;
   transform: translateX(0);
+  pointer-events: auto;
 }
 
 @media (max-width: 760px) {

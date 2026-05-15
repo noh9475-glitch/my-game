@@ -287,10 +287,10 @@ button {
 }
 
 .back-button {
-  position: absolute;
+  position: fixed;
   top: 24px;
   left: 24px;
-  z-index: 8;
+  z-index: 50;
   min-height: 42px;
   border: 1px solid rgba(255, 255, 255, 0.72);
   padding: 0 16px;
@@ -916,6 +916,10 @@ h2 {
   visibility: visible;
   transform: translateX(0);
   pointer-events: auto;
+}
+
+.back-button:active {
+  transform: translateX(0) translateY(1px);
 }
 
 @media (max-width: 760px) {

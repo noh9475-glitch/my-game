@@ -37,7 +37,7 @@ const specializationSkills = [
 
 document.querySelector('#app').innerHTML = `
   <main class="black-room" aria-label="The Black Room">
-    <button id="back-button" class="back-button" type="button" aria-label="Back to start" data-action-button>Back</button>
+    <button id="back-button" class="back-button" type="button" aria-label="Back to start">Back</button>
 
     <div class="scene-shell">
       <section class="room-stage" aria-hidden="true">
@@ -224,7 +224,7 @@ const bindActionButton = (button, action) => {
 }
 
 bindActionButton(startButton, beginEntry)
-bindActionButton(backButton, goBack)
+backButton.addEventListener('click', goBack)
 bindActionButton(submitFormButton, submitEntryForm)
 
 const updateStatPoints = (changedSlider) => {

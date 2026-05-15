@@ -384,6 +384,12 @@ button {
   cursor: not-allowed;
 }
 
+.exam-document button:disabled {
+  color: rgba(7, 7, 8, 0.48);
+  background: rgba(240, 240, 242, 0.46);
+  cursor: wait;
+}
+
 .document-login,
 .character-exam {
   position: absolute;
@@ -557,6 +563,20 @@ button {
 .exam-document input,
 .exam-document button {
   pointer-events: auto;
+}
+
+.auth-row {
+  display: grid;
+  gap: 10px;
+}
+
+.auth-status {
+  min-height: 1.35em;
+  margin: 0;
+  color: #111;
+  font-size: 0.78rem;
+  font-weight: 800;
+  line-height: 1.35;
 }
 
 .character-sheet > * {

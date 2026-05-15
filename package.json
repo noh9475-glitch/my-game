@@ -9,6 +9,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "firebase": "^12.13.0",
     "phaser": "^4.1.0"
   },
   "devDependencies": {

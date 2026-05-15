@@ -1,4 +1,7 @@
 import './style.css'
+import { onAuthStateChanged, signInWithPopup } from 'firebase/auth'
+import { doc, serverTimestamp, setDoc } from 'firebase/firestore'
+import { auth, db, googleProvider } from './firebase.js'
 
 const specializationSkills = [
   {
@@ -88,6 +91,11 @@ document.querySelector('#app').innerHTML = `
           <input type="text" name="student-name" autocomplete="username" placeholder="Student 01">
         </label>
 
+        <div class="auth-row">
+          <button id="google-sign-in-button" type="button" data-action-button>Sign In With Google</button>
+          <p id="auth-status" class="auth-status" aria-live="polite">Not signed in.</p>
+        </div>
+
         <button id="submit-form-button" type="button" data-action-button>Submit Form</button>
       </form>
     </section>
@@ -156,17 +164,21 @@ document.querySelector('#app').innerHTML = `
 
 const startButton = document.querySelector('#start-button')
 const backButton = document.querySelector('#back-button')
+const googleSignInButton = document.querySelector('#google-sign-in-button')
 const submitFormButton = document.querySelector('#submit-form-button')
 const turnPageButton = document.querySelector('#turn-page-button')
+const studentNameInput = document.querySelector('[name="student-name"]')
 const screen = document.querySelector('.black-room')
 const sceneShell = document.querySelector('.scene-shell')
 const stampMark = document.querySelector('.stamp-mark')
+const authStatus = document.querySelector('#auth-status')
 const statSliders = [...document.querySelectorAll('[data-stat-slider]')]
 const skillOptions = [...document.querySelectorAll('[data-skill-option]')]
 const pointsRemaining = document.querySelector('#points-remaining')
 const skillsRemaining = document.querySelector('#skills-remaining')
 const statPointLimit = 15
 const skillSelectionLimit = 2
+let currentUser = null
 
 const fitScene = () => {
   const scale = Math.min(window.innerWidth / 1000, window.innerHeight / 900)
@@ -194,7 +206,56 @@ const goBack = () => {
   }, 120)
 }
 
-const submitEntryForm = () => {
+const signInWithGoogle = async () => {
+  authStatus.textContent = 'Opening Google sign in...'
+
+  try {
+    await signInWithPopup(auth, googleProvider)
+  } catch (error) {
+    authStatus.textContent = error.message
+  }
+}
+
+const savePlayerProfile = async () => {
+  if (!currentUser) {
+    await signInWithGoogle()
+  }
+
+  if (!auth.currentUser) return false
+
+  const studentName = studentNameInput.value.trim() || auth.currentUser.displayName || 'Student 01'
+  studentNameInput.value = studentName
+  authStatus.textContent = 'Saving student record...'
+
+  await setDoc(
+    doc(db, 'players', auth.currentUser.uid),
+    {
+      studentName,
+      email: auth.currentUser.email,
+      displayName: auth.currentUser.displayName,
+      updatedAt: serverTimestamp(),
+    },
+    { merge: true },
+  )
+
+  localStorage.setItem('blackRoomStudentName', studentName)
+  authStatus.textContent = 'Student record saved.'
+  return true
+}
+
+const submitEntryForm = async () => {
+  submitFormButton.disabled = true
+
+  try {
+    const saved = await savePlayerProfile()
+    if (!saved) return
+  } catch (error) {
+    authStatus.textContent = error.message
+    return
+  } finally {
+    submitFormButton.disabled = false
+  }
+
   stampMark.classList.remove('is-stamped')
   void stampMark.offsetWidth
   stampMark.classList.add('is-stamped')
@@ -225,7 +286,26 @@ const bindActionButton = (button, action) => {
 
 bindActionButton(startButton, beginEntry)
 backButton.addEventListener('click', goBack)
+bindActionButton(googleSignInButton, signInWithGoogle)
 bindActionButton(submitFormButton, submitEntryForm)
+
+onAuthStateChanged(auth, (user) => {
+  currentUser = user
+
+  if (!user) {
+    authStatus.textContent = 'Not signed in.'
+    googleSignInButton.textContent = 'Sign In With Google'
+    return
+  }
+
+  const savedName = localStorage.getItem('blackRoomStudentName')
+  if (!studentNameInput.value.trim()) {
+    studentNameInput.value = savedName || user.displayName || ''
+  }
+
+  authStatus.textContent = `Signed in as ${user.email || user.displayName}`
+  googleSignInButton.textContent = 'Google Connected'
+})
 
 const updateStatPoints = (changedSlider) => {
   const spentBeforeChange = statSliders
